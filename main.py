@@ -21,10 +21,19 @@ import caesar
 class MainHandler(webapp2.RequestHandler):
     def get(self):
 
+
+
+
         message = "Hello, caesar!"
         encrypted_message = caesar.encrypt(message, 13)
 
-        self.response.write(encrypted_message)
+
+        text_area= "<textarea>" + encrypted_message + "</textarea>"
+        submit = "<input type='submit'/>"
+        form = "<form method='post'>" + text_area+ "<br>" + submit + "</form>"
+
+        content = form
+        self.response.write(content)
 
 
 
