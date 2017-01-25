@@ -16,21 +16,46 @@
 #
 import webapp2
 import caesar
+import cgi
+
+
+
+def build_page(text_area_content):
+    header = "<h1>Web Caesar</h1>"
+    rot_label = "<label>Rotate by:</label>"
+    message_label = "<label>Enter a message:</label>"
+    br = "<br>"
+
+    text_area= "<textarea name='message'>" + text_area_content + "</textarea>"
+    rotation = "<input type='number' name='rotation'></input>"
+    submit = "<input type='submit'/>"
+
+    form = ("<form method='post'>"
+            + rot_label + br + rotation + br + br
+            + message_label + br + text_area + br + br
+            + submit + "</form>")
+
+    content = header + form
+
+    return content
+
 
 
 class MainHandler(webapp2.RequestHandler):
+
     def get(self):
+        content = build_page("")
+        self.response.write(content)
 
 
-        message = "Hello, caesar!"
-        encrypted_message = caesar.encrypt(message, 13)
+    def post(self):
+        message = self.request.get("message")
+        rotation = self.request.get("rotation")
 
+        encrypted_message = caesar.encrypt(message, rotation)
+        escaped_message = cgi.escape(encrypted_message)
+        content = build_page(escaped_message)
 
-        text_area= "<textarea>" + encrypted_message + "</textarea>"
-        submit = "<input type='submit'/>"
-        form = "<form>" + text_area+ "<br>" + submit + "</form>"
-
-        content = form
         self.response.write(content)
 
 
